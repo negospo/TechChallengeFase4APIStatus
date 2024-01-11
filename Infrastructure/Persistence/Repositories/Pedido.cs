@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Enums;
+using Application.Interfaces.Repositories;
 using Dapper;
 
 namespace Infrastructure.Persistence.Repositories
@@ -9,6 +10,13 @@ namespace Infrastructure.Persistence.Repositories
         {
             string query = "select pedido_id,pedido_status_id as status from pedido where pedido_id = any(@pedidoIds)";
             var payments = Database.Connection().Query<Application.DTOs.Output.Pedido>(query, new { pedidoIds = pedidoIds });
+            return payments;
+        }
+
+        public IEnumerable<Application.DTOs.Output.Pedido> ListByStatus(PedidoStatus status)
+        {
+            string query = "select pedido_id,pedido_status_id as status from pedido where pedido_status_id = @status";
+            var payments = Database.Connection().Query<Application.DTOs.Output.Pedido>(query, new { status = (int)status });
             return payments;
         }
 
@@ -51,5 +59,7 @@ namespace Infrastructure.Persistence.Repositories
 
             return affected > 0;
         }
+
+    
     }
 }

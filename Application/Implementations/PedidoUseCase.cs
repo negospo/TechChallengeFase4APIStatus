@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.DTOs.Output;
+using Application.Enums;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.UseCases;
 
 namespace Application.Implementations
@@ -12,6 +14,8 @@ namespace Application.Implementations
             this._pedidoRepository = pedidoRepository;
         }
 
+     
+
         DTOs.Output.Pedido IPedidoUseCase.Get(int pedidoId)
         {
             var result = this._pedidoRepository.Get(pedidoId);
@@ -24,6 +28,12 @@ namespace Application.Implementations
         IEnumerable<DTOs.Output.Pedido> IPedidoUseCase.List(List<int> pedidoIds)
         {
             var result = this._pedidoRepository.List(pedidoIds);
+            return result;
+        }
+
+        public IEnumerable<Pedido> ListByStatus(PedidoStatus status)
+        {
+            var result = this._pedidoRepository.ListByStatus(status);
             return result;
         }
 

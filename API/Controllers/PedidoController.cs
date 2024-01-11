@@ -21,7 +21,7 @@ namespace API.Controllers
         /// </summary>
         /// <response code="404" >Pedido não encontrado</response> 
         [HttpGet]
-        [Route("pedido/{pedidoId}")]
+        [Route("{pedidoId}")]
         [ProducesResponseType(typeof(Application.DTOs.Output.Pedido), 200)]
         public ActionResult<IEnumerable<Application.DTOs.Output.Pedido>> Get(int pedidoId)
         {
@@ -38,8 +38,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Lista todos os pedidos status passados por parâmetro..
+        /// Lista todos os pedidos status passados por parâmetro.
         /// </summary>
+        /// <param name="pedidoIds">Ids dos pedidos</param>
         [HttpPost]
         [Route("list")]
         [ProducesResponseType(typeof(IEnumerable<Application.DTOs.Output.Pedido>), 200)]
@@ -48,6 +49,17 @@ namespace API.Controllers
             return Ok(_pedidoUseCase.List(pedidoIds));
         }
 
+        /// <summary>
+        /// Lista todos os pedidos status de um status específico
+        /// </summary>
+        /// <param name="status">Status do pedido</param>
+        [HttpPost]
+        [Route("listByStatus")]
+        [ProducesResponseType(typeof(IEnumerable<Application.DTOs.Output.Pedido>), 200)]
+        public ActionResult<IEnumerable<Application.DTOs.Output.Pedido>> ListByStatus(Application.Enums.PedidoStatus status)
+        {
+            return Ok(_pedidoUseCase.ListByStatus(status));
+        }
 
         /// <summary>
         /// Cria um novo pedido status
@@ -91,7 +103,7 @@ namespace API.Controllers
         /// <response code="401" >Não autorizado</response>
         /// <response code="404" >Pedido não encontrado</response>
         [HttpPut]
-        [Route("pedido/{pedidoId}/status/update")]
+        [Route("{pedidoId}/status/update")]
         [ProducesResponseType(typeof(Validation.CustonValidationResultModel), 400)]
         //[Authorize]
         public ActionResult<bool> Save(int pedidoId, Domain.Enums.PedidoStatus? status)
