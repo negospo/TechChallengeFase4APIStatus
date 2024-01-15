@@ -1,7 +1,6 @@
 ﻿using Application.DTOs.Output;
 using Application.Enums;
 using Application.Interfaces.Repositories;
-using Application.Interfaces.UseCases;
 
 namespace Application.Implementations
 {
@@ -14,9 +13,7 @@ namespace Application.Implementations
             this._pedidoRepository = pedidoRepository;
         }
 
-     
-
-        DTOs.Output.Pedido IPedidoUseCase.Get(int pedidoId)
+        public DTOs.Output.Pedido Get(int pedidoId)
         {
             var result = this._pedidoRepository.Get(pedidoId);
             if (result == null)
@@ -25,7 +22,7 @@ namespace Application.Implementations
             return result;
         }
 
-        IEnumerable<DTOs.Output.Pedido> IPedidoUseCase.List(List<int> pedidoIds)
+        public IEnumerable<DTOs.Output.Pedido> List(List<int> pedidoIds)
         {
             var result = this._pedidoRepository.List(pedidoIds);
             return result;
@@ -37,7 +34,7 @@ namespace Application.Implementations
             return result;
         }
 
-        bool IPedidoUseCase.Save(DTOs.Imput.Pedido pedido)
+        public bool Save(DTOs.Imput.Pedido pedido)
         {
             var entity = new Domain.Entities.PedidoStatus(
                  pedido.PedidoId.Value,
@@ -46,7 +43,7 @@ namespace Application.Implementations
             return _pedidoRepository.Save(entity);
         }
 
-        bool IPedidoUseCase.Update(int pedidoId, Domain.Enums.PedidoStatus status)
+        public bool Update(int pedidoId, Domain.Enums.PedidoStatus status)
         {
             var entity = new Domain.Entities.PedidoStatus(pedidoId, status);
             return _pedidoRepository.Update(entity);
