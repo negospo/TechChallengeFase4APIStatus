@@ -106,7 +106,7 @@ namespace API.Controllers
         [Route("{pedidoId}/status/update")]
         [ProducesResponseType(typeof(Validation.CustonValidationResultModel), 400)]
         //[Authorize]
-        public ActionResult<bool> Save(int pedidoId, Domain.Enums.PedidoStatus? status)
+        public ActionResult<bool> Update(int pedidoId, Domain.Enums.PedidoStatus? status)
         {
             if (!status.HasValue)
             {
