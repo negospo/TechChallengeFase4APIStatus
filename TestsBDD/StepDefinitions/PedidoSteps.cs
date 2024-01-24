@@ -4,7 +4,7 @@ using Application.Interfaces.UseCases;
 using Moq;
 using NUnit.Framework;
 
-namespace TestsDBB.StepDefinitions
+namespace TestsBDD.StepDefinitions
 {
     [Binding]
     public class PedidoSteps
