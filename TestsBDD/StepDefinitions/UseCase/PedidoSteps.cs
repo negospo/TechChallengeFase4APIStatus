@@ -4,7 +4,7 @@ using Application.Interfaces.UseCases;
 using Moq;
 using NUnit.Framework;
 
-namespace TestsBDD.StepDefinitions
+namespace TestsBDD.StepDefinitions.UseCase
 {
     [Binding]
     public class PedidoSteps
@@ -27,7 +27,7 @@ namespace TestsBDD.StepDefinitions
             _mockPedidoRepository = new Mock<IPedidoRepository>();
             _pedidoUseCase = new PedidoUseCase(_mockPedidoRepository.Object);
 
-            this.databaseMok = new List<Application.DTOs.Output.Pedido>
+            databaseMok = new List<Application.DTOs.Output.Pedido>
             {
                  new Application.DTOs.Output.Pedido(){  PedidoId = 1 , Status = Application.Enums.PedidoStatus.Recebido},
                  new Application.DTOs.Output.Pedido(){  PedidoId = 2 , Status = Application.Enums.PedidoStatus.EmPreparacao},
@@ -42,7 +42,7 @@ namespace TestsBDD.StepDefinitions
                                    .Select(int.Parse)
                                    .ToList();
 
-            this._pedidoIds = _pedidoIds;
+            _pedidoIds = _pedidoIds;
             _mockPedidoRepository.Setup(repo => repo.List(pedidoIds))
                          .Returns(databaseMok);
         }
@@ -87,22 +87,22 @@ namespace TestsBDD.StepDefinitions
         [Given(@"O ID do pedido é (.*)")]
         public void GivenOIDDoPedidoE(int pedidoId)
         {
-            this._pedidoId = pedidoId;
+            _pedidoId = pedidoId;
         }
 
         [When(@"Eu solicito os detalhes desse pedido")]
         public void WhenEuSolicitoOsDetalhesDessePedido()
         {
             _mockPedidoRepository.Setup(repo => repo.Get(_pedidoId))
-                     .Returns(this.databaseMok.First(f => f.PedidoId == this._pedidoId));
+                     .Returns(databaseMok.First(f => f.PedidoId == _pedidoId));
 
-            this._getResult = _pedidoUseCase.Get(this._pedidoId);
+            _getResult = _pedidoUseCase.Get(_pedidoId);
         }
 
         [Then(@"Os detalhes do pedido com ID (.*) são retornados")]
         public void ThenOsDetalhesDoPedidoComIDSaoRetornados(int pedidoId)
         {
-            Assert.IsNotNull(this._getResult);
+            Assert.IsNotNull(_getResult);
             Assert.AreEqual(pedidoId, _getResult.PedidoId);
         }
 
@@ -110,20 +110,20 @@ namespace TestsBDD.StepDefinitions
         [Given(@"Eu tenho um novo pedido com ID (.*) e status '(.*)'")]
         public void GivenEuTenhoUmNovoPedidoComIDEStatus(int pedidoId, Application.Enums.PedidoStatus status)
         {
-            this._newPedido = new Application.DTOs.Imput.Pedido { PedidoId = pedidoId, Status = status };
+            _newPedido = new Application.DTOs.Imput.Pedido { PedidoId = pedidoId, Status = status };
         }
 
         [When(@"Eu tento salvar esse pedido")]
         public void WhenEuTentoSalvarEssePedido()
         {
-            this._pedidoUseCase.Save(this._newPedido);
-            this._saveResult = true;
+            _pedidoUseCase.Save(_newPedido);
+            _saveResult = true;
         }
 
         [Then(@"O pedido é salvo com sucesso")]
         public void ThenOPedidoESalvoComSucesso()
         {
-            Assert.IsTrue(this._saveResult);
+            Assert.IsTrue(_saveResult);
         }
 
 
@@ -137,14 +137,14 @@ namespace TestsBDD.StepDefinitions
         [When(@"Eu atualizo o status desse pedido")]
         public void WhenEuAtualizoOStatusDessePedido()
         {
-            _pedidoUseCase.Update(this._pedidoId, this._newStatus);
-            this._saveResult = true;
+            _pedidoUseCase.Update(_pedidoId, _newStatus);
+            _saveResult = true;
         }
 
         [Then(@"O status do pedido é atualizado com sucesso")]
         public void ThenOStatusDoPedidoEAtualizadoComSucesso()
         {
-            Assert.IsTrue(this._saveResult);
+            Assert.IsTrue(_saveResult);
         }
     }
 }

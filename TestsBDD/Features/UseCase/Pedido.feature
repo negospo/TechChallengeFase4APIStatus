@@ -1,4 +1,4 @@
-﻿Feature: Pedidos
+﻿Feature: UseCase Pedido Status
 
 Scenario: Listar pedidos por IDs
   Given Eu tenho os seguintes IDs de pedido: 1,2,3
