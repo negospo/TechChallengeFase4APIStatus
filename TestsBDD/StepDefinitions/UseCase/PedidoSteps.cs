@@ -19,8 +19,9 @@ namespace TestsBDD.StepDefinitions.UseCase
         int _pedidoId;
         bool _saveResult;
         Domain.Enums.PedidoStatus _newStatus;
+        Application.Enums.PedidoStatus _pedidoStatus;
+        Exception _capturedException;
 
-        private Application.Enums.PedidoStatus _pedidoStatus;
 
         public PedidoSteps()
         {
@@ -76,10 +77,10 @@ namespace TestsBDD.StepDefinitions.UseCase
         public void ThenTodosOsPedidosComStatusSaoRetornados(string status)
         {
             var expectedStatus = Enum.Parse<Application.Enums.PedidoStatus>(status);
-            Assert.IsNotNull(_result); // Verifica se o resultado não é nulo
+            Assert.IsNotNull(_result); 
             foreach (var pedido in _result)
             {
-                Assert.AreEqual(expectedStatus, pedido.Status); // Verifica o status de cada pedido
+                Assert.AreEqual(expectedStatus, pedido.Status); 
             }
         }
 
@@ -94,9 +95,23 @@ namespace TestsBDD.StepDefinitions.UseCase
         public void WhenEuSolicitoOsDetalhesDessePedido()
         {
             _mockPedidoRepository.Setup(repo => repo.Get(_pedidoId))
-                     .Returns(databaseMok.First(f => f.PedidoId == _pedidoId));
+                     .Returns(databaseMok.FirstOrDefault(f => f.PedidoId == _pedidoId));
 
-            _getResult = _pedidoUseCase.Get(_pedidoId);
+            try
+            {
+                _getResult = _pedidoUseCase.Get(_pedidoId);
+            }
+            catch (Exception ex)
+            {
+                _capturedException = ex;
+            }
+        }
+
+        [Then(@"Uma exceção de 'NotFoundException' deve ser lançada")]
+        public void ThenUmaExcecaoDeNotFoundExceptionDeveSerLancada()
+        {
+            Assert.IsNotNull(_capturedException);
+            Assert.That(_capturedException, Is.TypeOf<Application.CustomExceptions.NotFoundException>());
         }
 
         [Then(@"Os detalhes do pedido com ID (.*) são retornados")]

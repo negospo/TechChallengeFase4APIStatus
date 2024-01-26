@@ -15,6 +15,11 @@ Scenario: Obter detalhes de um pedido específico
   When Eu solicito os detalhes desse pedido
   Then Os detalhes do pedido com ID 1 são retornados
 
+  Scenario: Obter detalhes de um pedido inválido
+    Given O ID do pedido é 5
+    When Eu solicito os detalhes desse pedido
+    Then Uma exceção de 'NotFoundException' deve ser lançada
+
 Scenario: Salvar um pedido
   Given Eu tenho um novo pedido com ID 5 e status 'EmPreparacao'
   When Eu tento salvar esse pedido
